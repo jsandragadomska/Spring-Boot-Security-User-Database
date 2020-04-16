@@ -1,12 +1,22 @@
 package com.gadomska.springbootsecurity.controller;
 
+import com.gadomska.springbootsecurity.db.UserRepository;
+import com.gadomska.springbootsecurity.model.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/public")
 public class PublicRestApiController {
+
+    private UserRepository userRepository;
+
+    public PublicRestApiController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public PublicRestApiController(){}
 
@@ -18,6 +28,11 @@ public class PublicRestApiController {
     @GetMapping("test2")
     public String test2(){
         return "API test 2";
+    }
+
+    @GetMapping("users")
+    public List<User> users(){
+        return this.userRepository.findAll();
     }
 
 }
