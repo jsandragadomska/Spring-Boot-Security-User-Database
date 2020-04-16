@@ -2,6 +2,7 @@ package com.gadomska.springbootsecurity.controller;
 
 import com.gadomska.springbootsecurity.db.UserRepository;
 import com.gadomska.springbootsecurity.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ public class PublicRestApiController {
 
     private UserRepository userRepository;
 
+    @Autowired
     public PublicRestApiController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }

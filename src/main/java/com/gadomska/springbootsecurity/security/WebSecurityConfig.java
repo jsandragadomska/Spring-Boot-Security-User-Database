@@ -1,7 +1,10 @@
-package com.gadomska.springbootsecurity;
+package com.gadomska.springbootsecurity.security;
 
+import com.gadomska.springbootsecurity.security.UserPrincipalDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,22 +16,31 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private UserPrincipalDetailsService userPrincipalDetailsService;
+
+    @Autowired
+    public WebSecurityConfig(UserPrincipalDetailsService userPrincipalDetailsService) {
+        this.userPrincipalDetailsService = userPrincipalDetailsService;
+    }
+
     @Bean
     PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    DaoAuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        daoAuthenticationProvider.setUserDetailsService(this.userPrincipalDetailsService);
+
+        return daoAuthenticationProvider;
+    }
+
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth
-                .inMemoryAuthentication()
-                .withUser("manager").password(passwordEncoder().encode("manager123"))
-                .authorities("ACCESS_TEST1","ROLE_MANAGER")
-                .and()
-                .withUser("admin").password(passwordEncoder().encode("admin123"))
-                .authorities("ACCESS_TEST1","ACCESS_TEST2","ROLE_ADMIN")
-                .and()
-                .withUser("user").password(passwordEncoder().encode("user123")).roles("USER");
+                .authenticationProvider(authenticationProvider());
     }
 
     @Override
