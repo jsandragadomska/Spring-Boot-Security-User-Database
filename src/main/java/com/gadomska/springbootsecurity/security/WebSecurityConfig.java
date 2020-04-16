@@ -55,8 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/public/test2").hasAuthority("ACCESS_TEST2")
                 .antMatchers("/api/public/users").hasRole("ADMIN")
                 .and()
-                .formLogin().permitAll()
-                .and()
-                .httpBasic();
+                .formLogin()
+                .loginPage("/login");
     }
 }
