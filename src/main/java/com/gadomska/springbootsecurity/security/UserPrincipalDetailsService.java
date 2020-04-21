@@ -2,7 +2,7 @@ package com.gadomska.springbootsecurity.security;
 
 import com.gadomska.springbootsecurity.db.UserRepository;
 import com.gadomska.springbootsecurity.model.User;
-import com.gadomska.springbootsecurity.security.UserPrincipal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
